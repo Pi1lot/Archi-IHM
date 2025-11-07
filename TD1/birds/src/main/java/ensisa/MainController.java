@@ -1,12 +1,13 @@
 package ensisa;
 
-import java.io.IOException;
-import javafx.fxml.FXML;
+import ensisa.model.BirdRepository;
 
 public class MainController {
 
-    @FXML
-    private void switchToSecondary() throws IOException {
-        BirdApplication.setRoot("primary");
+    private BirdRepository repository;
+
+    public MainController(){
+        repository = new BirdRepository();
+        repository.load();
     }
 }

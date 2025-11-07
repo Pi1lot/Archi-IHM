@@ -2,6 +2,8 @@ module ensisa {
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens ensisa to javafx.fxml;
-    exports ensisa;
+requires com.fasterxml.jackson.databind;
+opens ensisa to javafx.fxml, com.fasterxml.jackson.databind;
+exports ensisa;
+exports ensisa.model;
 }
