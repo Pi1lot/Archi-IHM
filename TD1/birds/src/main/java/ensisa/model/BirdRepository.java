@@ -15,7 +15,7 @@ public class BirdRepository {
 
     public void load() {
         try (InputStream inputStream = getClass().
-                getResourceAsStream("/ensisa/birds/assets/Birds.json")) {
+                getResourceAsStream("/assets/Birds.json")) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(
                     DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
