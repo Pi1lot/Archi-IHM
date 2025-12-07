@@ -1,32 +1,30 @@
 package ensisa;
 
+import ensisa.model.Bird;
+import ensisa.model.BirdCellFactory;
 import ensisa.model.BirdRepository;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
-import ensisa.model.BirdCellFactory;
-import ensisa.model.Bird;
-
 
 public class MainController {
 
-    private BirdRepository repository;
+    private final BirdRepository repository;
 
     @FXML
     private Label commonNameLabel;
     @FXML
     private Label latinNameLabel;
-
     @FXML
     private Label familyLabel;
-
     @FXML
     private Label genusLabel;
-
     @FXML
     private Label specieLabel;
-
     @FXML
     private Label descriptionLabel;
 
@@ -36,26 +34,47 @@ public class MainController {
     @FXML
     private ListView<Bird> birdListView;
 
-    public Bird currentBird;
+    private final ObjectProperty<Bird> currentBird;
 
-
-    public MainController(){
+    public MainController() {
         repository = new BirdRepository();
         repository.load();
-
-        currentBird = repository.birds.get(0);
+        // On initialise currentBird avec le premier oiseau
+        currentBird = new SimpleObjectProperty<>(repository.birds.get(0));
     }
-    
 
+    // Accesseurs et mutateurs pour currentBird
+    public ObjectProperty<Bird> currentBirdProperty() {
+        return currentBird;
+    }
+
+    public Bird getCurrentBird() {
+        return currentBird.get();
+    }
+
+    public void setCurrentBird(Bird bird) {
+        currentBird.set(bird);
+    }
+
+    @FXML
     public void initialize() {
-        commonNameLabel.textProperty().bind(currentBird.commonNameProperty());
-        latinNameLabel.textProperty().bind(currentBird.latinNameProperty());
-        familyLabel.textProperty().bind(currentBird.familyProperty());
-        genusLabel.textProperty().bind(currentBird.genusProperty());
-        specieLabel.textProperty().bind(currentBird.specieProperty());
-        descriptionLabel.textProperty().bind(currentBird.descriptionProperty());
-        birdImageView.imageProperty().bind(currentBird.imageProperty());
+        commonNameLabel.textProperty().bind(Bindings.selectString(currentBird, "commonName"));
+        latinNameLabel.textProperty().bind(Bindings.selectString(currentBird, "latinName"));
+        familyLabel.textProperty().bind(Bindings.selectString(currentBird, "family"));
+        genusLabel.textProperty().bind(Bindings.selectString(currentBird, "genus"));
+        specieLabel.textProperty().bind(Bindings.selectString(currentBird, "specie"));
+        descriptionLabel.textProperty().bind(Bindings.selectString(currentBird, "description"));
+        birdImageView.imageProperty().bind(Bindings.select(currentBird, "image"));
+
         birdListView.setCellFactory(new BirdCellFactory());
         birdListView.getItems().addAll(repository.birds);
+
+        birdListView.getSelectionModel().select(currentBird.get());
+
+        birdListView.getSelectionModel().selectedItemProperty().addListener((obs, oldBird, newBird) -> {
+            if (newBird != null) {
+                currentBird.set(newBird);
+            }
+        });
     }
 }
