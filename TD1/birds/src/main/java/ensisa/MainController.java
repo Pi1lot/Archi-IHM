@@ -15,10 +15,15 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 
 public class MainController {
 
     private final BirdRepository repository;
+
+    private FilteredList<Bird> filteredBirdList;
 
     @FXML
     private Button editButton;
@@ -46,6 +51,8 @@ public class MainController {
     @FXML
     private Label descriptionLabel;
 
+    @FXML
+    private TextField filterTextField;
     @FXML
     private ImageView birdImageView;
 
@@ -81,17 +88,36 @@ public class MainController {
     private void deleteButtonAction(ActionEvent event) {
         Bird birdToDelete = getCurrentBird();
         if (birdToDelete != null) {
-            birdListView.getSelectionModel().clearSelection();
-
-            setCurrentBird(null);
-
             repository.birds.remove(birdToDelete);
-            birdListView.getItems().remove(birdToDelete);
+            setCurrentBird(null);
+            birdListView.getSelectionModel().clearSelection();
         }
     }
 
+
     @FXML
     public void initialize() {
+        // Filtrage sur la vraie liste source
+        filteredBirdList = new FilteredList<>(repository.birds, bird -> true);
+        birdListView.setItems(filteredBirdList);
+
+        filterTextField.textProperty().addListener((obs, oldValue, newValue) -> {
+            String filter = newValue.toLowerCase().trim();
+            if (filter.isEmpty()) {
+                filteredBirdList.setPredicate(bird -> true);
+            } else {
+                filteredBirdList.setPredicate(bird ->
+                    bird.getCommonName().toLowerCase().contains(filter)
+                );
+            }
+        });
+
+        birdListView.setCellFactory(new BirdCellFactory());
+
+        birdListView.getSelectionModel().selectedItemProperty().addListener((obs, oldBird, newBird) -> {
+            currentBird.set(newBird);
+        });
+
         commonNameLabel.textProperty().bind(Bindings.selectString(currentBird, "commonName"));
         latinNameLabel.textProperty().bind(Bindings.selectString(currentBird, "latinName"));
         familyLabel.textProperty().bind(Bindings.selectString(currentBird, "family"));
@@ -99,15 +125,6 @@ public class MainController {
         specieLabel.textProperty().bind(Bindings.selectString(currentBird, "specie"));
         descriptionLabel.textProperty().bind(Bindings.selectString(currentBird, "description"));
         birdImageView.imageProperty().bind(Bindings.select(currentBird, "image"));
-
-        birdListView.setCellFactory(new BirdCellFactory());
-        birdListView.getItems().addAll(repository.birds);
-
-        birdListView.getSelectionModel().selectedItemProperty().addListener((obs, oldBird, newBird) -> {
-            if (newBird != null) {
-                currentBird.set(newBird);
-            }
-        });
 
         editButton.disableProperty().bind(currentBird.isNull());
         deleteButton.disableProperty().bind(currentBird.isNull());
