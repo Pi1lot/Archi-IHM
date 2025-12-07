@@ -1,5 +1,6 @@
 /home/dorian/Documents/archi_ihm/TD1/birds/src/main/java/ensisa/MainController.java
 /home/dorian/Documents/archi_ihm/TD1/birds/src/main/java/ensisa/BirdApplication.java
 /home/dorian/Documents/archi_ihm/TD1/birds/src/main/java/ensisa/model/Bird.java
+/home/dorian/Documents/archi_ihm/TD1/birds/src/main/java/ensisa/model/BirdCellFactory.java
 /home/dorian/Documents/archi_ihm/TD1/birds/src/main/java/ensisa/model/BirdRepository.java
 /home/dorian/Documents/archi_ihm/TD1/birds/src/main/java/module-info.java
