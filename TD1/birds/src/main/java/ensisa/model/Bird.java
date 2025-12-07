@@ -1,7 +1,13 @@
 package ensisa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.property.Property;
+
+import javafx.scene.image.Image;
 
 public class Bird {
     private StringProperty family = new SimpleStringProperty(this, "family", "");
@@ -11,6 +17,40 @@ public class Bird {
     private StringProperty latinName = new SimpleStringProperty(this, "latinName", "");
     private StringProperty description = new SimpleStringProperty(this, "description", "");
     private StringProperty imagePath = new SimpleStringProperty(this, "imagePath", "");
+
+    public Bird() {
+        imagePath.addListener((obs, oldValue, newValue) -> {
+            System.out.println("imagePath = " + newValue);
+
+            var url = getClass().getResource("/assets/images/" + newValue);
+            System.out.println("URL = " + url);
+
+            if (url != null) {
+                Image img = new Image(url.toExternalForm());
+                System.out.println("Image error = " + img.getException());
+                setImage(img);
+            } else {
+                System.err.println("Image introuvable : /assets/images/" + newValue);
+                setImage(null);
+            }
+        });
+
+    }
+
+    @JsonIgnore
+    private Property<Image> image = new SimpleObjectProperty<>(this, "image");
+
+    public Image getImage() {
+        return image.getValue();
+    }
+
+    public Property<Image> imageProperty() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image.setValue(image);
+    }
 
     public String getFamily() {
         return family.get();
