@@ -15,6 +15,18 @@ public class MainController {
     @FXML
     private Label latinNameLabel;
 
+    @FXML
+    private Label familyLabel;
+
+    @FXML
+    private Label genusLabel;
+
+    @FXML
+    private Label specieLabel;
+
+    @FXML
+    private Label descriptionLabel;
+
     public Bird currentBird;
 
     public MainController(){
@@ -25,7 +37,10 @@ public class MainController {
     }
 
     public void initialize() {
-        commonNameLabel.setText(currentBird.getCommonName());
-        latinNameLabel.setText(currentBird.getLatinName());
+        commonNameLabel.textProperty().bind(currentBird.commonNameProperty());
+        latinNameLabel.textProperty().bind(currentBird.latinNameProperty());
+        familyLabel.textProperty().bind(currentBird.familyProperty());
+        genusLabel.textProperty().bind(currentBird.genusProperty());
+        specieLabel.textProperty().bind(currentBird.specieProperty());
     }
 }
