@@ -57,8 +57,8 @@ public class MainController {
     public MainController() {
         repository = new BirdRepository();
         repository.load();
-        // On initialise currentBird avec le premier oiseau
-        currentBird = new SimpleObjectProperty<>(repository.birds.get(0));
+        currentBird = new SimpleObjectProperty<>(null);
+
     }
 
     // Accesseurs et mutateurs pour currentBird
@@ -87,12 +87,12 @@ public class MainController {
         birdListView.setCellFactory(new BirdCellFactory());
         birdListView.getItems().addAll(repository.birds);
 
-        birdListView.getSelectionModel().select(currentBird.get());
-
         birdListView.getSelectionModel().selectedItemProperty().addListener((obs, oldBird, newBird) -> {
             if (newBird != null) {
                 currentBird.set(newBird);
             }
         });
+
+        editButton.disableProperty().bind(currentBird.isNull());
     }
 }
