@@ -2,18 +2,36 @@ package ensisa;
 
 import ensisa.model.Bird;
 import ensisa.model.BirdCellFactory;
+import ensisa.model.BirdEditDialog;
 import ensisa.model.BirdRepository;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 
 public class MainController {
 
     private final BirdRepository repository;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private void editButtonAction(ActionEvent event){
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        BirdEditDialog dialog = new BirdEditDialog(stage, getCurrentBird());
+        dialog.showAndWait().ifPresent(bird -> {
+            getCurrentBird().copyFrom(bird);
+        });
+    }
 
     @FXML
     private Label commonNameLabel;

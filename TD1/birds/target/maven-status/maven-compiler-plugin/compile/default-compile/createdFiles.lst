@@ -1,6 +1,7 @@
 ensisa/model/BirdRepository.class
 ensisa/MainController.class
 module-info.class
+ensisa/model/BirdEditDialog.class
 ensisa/model/BirdCellFactory$1.class
 ensisa/BirdApplication.class
 ensisa/model/BirdCellFactory.class

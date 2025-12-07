@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensisa.MainController">
    <center>
       <VBox alignment="CENTER" spacing="5.0">
@@ -60,7 +59,7 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <Button mnemonicParsing="false" text="Button" />
+          <Button fx:id="editButton" mnemonicParsing="false" onAction="#editButtonAction" text="Editer" />
         </items>
       </ToolBar>
    </top>
