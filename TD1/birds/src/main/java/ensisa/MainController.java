@@ -75,6 +75,22 @@ public class MainController {
     }
 
     @FXML
+    private Button deleteButton;
+
+    @FXML
+    private void deleteButtonAction(ActionEvent event) {
+        Bird birdToDelete = getCurrentBird();
+        if (birdToDelete != null) {
+            birdListView.getSelectionModel().clearSelection();
+
+            setCurrentBird(null);
+
+            repository.birds.remove(birdToDelete);
+            birdListView.getItems().remove(birdToDelete);
+        }
+    }
+
+    @FXML
     public void initialize() {
         commonNameLabel.textProperty().bind(Bindings.selectString(currentBird, "commonName"));
         latinNameLabel.textProperty().bind(Bindings.selectString(currentBird, "latinName"));
@@ -94,5 +110,6 @@ public class MainController {
         });
 
         editButton.disableProperty().bind(currentBird.isNull());
+        deleteButton.disableProperty().bind(currentBird.isNull());
     }
 }
