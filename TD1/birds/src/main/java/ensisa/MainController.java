@@ -3,6 +3,7 @@ package ensisa;
 import ensisa.model.BirdRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import ensisa.model.Bird;
 
@@ -31,6 +32,9 @@ public class MainController {
     @FXML
     private ImageView birdImageView;
 
+    @FXML
+    private ListView<Bird> birdListView;
+
     public Bird currentBird;
 
 
@@ -49,5 +53,6 @@ public class MainController {
         specieLabel.textProperty().bind(currentBird.specieProperty());
         descriptionLabel.textProperty().bind(currentBird.descriptionProperty());
         birdImageView.imageProperty().bind(currentBird.imageProperty());
+        birdListView.setItems(repository.birds);
     }
 }
